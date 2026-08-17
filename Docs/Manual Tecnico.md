@@ -47,6 +47,8 @@ curl -i http://192.168.122.50:5000/v2/_catalog
 }
 ```
 
+![alt text](image.png)
+
 ---
 
 ## 4. Estructura de APIs y Endpoints
@@ -67,6 +69,9 @@ Cada API expone un endpoint GET `/health` que retorna la disponibilidad del serv
 }
 ```
 
+![alt text](image-1.png)
+![alt text](image-4.png)
+
 ### 4.2 Endpoints de Comunicación Cruzada (Cross-Calls)
 Cada API puede contactar el endpoint `/health` de sus servicios pares mediante cliente HTTP.
 
@@ -80,6 +85,7 @@ Cada API puede contactar el endpoint `/health` de sus servicios pares mediante c
 }
 ```
 
+![alt text](image-2.png)
 * **Formato de Respuesta Fallo (`connection: false`):**
 ```json
 {
@@ -105,6 +111,8 @@ Cada API puede contactar el endpoint `/health` de sus servicios pares mediante c
 | **VM2** ➔ **API2** | `GET` | `http://192.168.122.50:8082/api2/202304063/call-api3` | `200 OK` | `{"apiname":"API3","message":"The API3 located on the VM3 is working","connection":true,"carnet":"202304063"}` |
 | **VM2** ➔ **API3** | `GET` | `http://192.168.122.227:8083/api3/202304063/call-api1` | `200 OK` | `{"apiname":"API1","message":"The API1 located on the VM1 is working","connection":true,"carnet":"202304063"}` |
 | **VM2** ➔ **API3** | `GET` | `http://192.168.122.227:8083/api3/202304063/call-api2` | `200 OK` | `{"apiname":"API2","message":"The API2 located on the VM1 is working","connection":true,"carnet":"202304063"}` |
+
+![alt text](image-3.png)
 
 ---
 
