@@ -1,0 +1,1 @@
+savedcmd_/home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/continfo_pr2_so1_202304063.mod := printf '%s\n'   continfo_pr2_so1_202304063.o | awk '!x[$$0]++ { print("/home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/"$$0) }' > /home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/continfo_pr2_so1_202304063.mod

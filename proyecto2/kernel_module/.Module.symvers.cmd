@@ -1,0 +1,1 @@
+savedcmd_/home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/Module.symvers :=  scripts/mod/modpost -M -m       -o /home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/Module.symvers -T /home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/modules.order -i Module.symvers -e 
