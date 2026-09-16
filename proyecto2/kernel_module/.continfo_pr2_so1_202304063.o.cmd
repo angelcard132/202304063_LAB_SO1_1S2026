@@ -1062,6 +1062,7 @@ deps_/home/angel/Desktop/202304063_LAB_SO1_1S2026/proyecto2/kernel_module/contin
   /usr/src/linux-headers-6.12.101+deb13-common/include/linux/string_helpers.h \
   /usr/src/linux-headers-6.12.101+deb13-common/include/linux/ctype.h \
   /usr/src/linux-headers-6.12.101+deb13-common/include/linux/string_choices.h \
+  /usr/src/linux-headers-6.12.101+deb13-common/include/linux/sched/cputime.h \
   /usr/src/linux-headers-6.12.101+deb13-common/include/linux/mm.h \
     $(wildcard include/config/HAVE_ARCH_MMAP_RND_BITS) \
     $(wildcard include/config/HAVE_ARCH_MMAP_RND_COMPAT_BITS) \

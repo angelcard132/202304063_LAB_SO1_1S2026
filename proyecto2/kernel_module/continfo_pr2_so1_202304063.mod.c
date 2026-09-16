@@ -21,8 +21,10 @@ __used __section("__versions") = {
 	{ 0x581a7cd, "single_open" },
 	{ 0x40c7247c, "si_meminfo" },
 	{ 0x2529ebe1, "seq_printf" },
+	{ 0x8d522714, "__rcu_read_lock" },
 	{ 0xd2450a5e, "init_task" },
-	{ 0x15ba50a6, "jiffies" },
+	{ 0x1419a6c1, "task_cputime_adjusted" },
+	{ 0x2469810f, "__rcu_read_unlock" },
 	{ 0xf0fdf6cb, "__stack_chk_fail" },
 	{ 0xc4e07007, "remove_proc_entry" },
 	{ 0xf99f317e, "seq_read" },
@@ -38,4 +40,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "B6F6BEAA7A39397056F1894");
+MODULE_INFO(srcversion, "F8BFA4964E4CF7A8BCFDF50");
