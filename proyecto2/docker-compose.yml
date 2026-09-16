@@ -1,0 +1,22 @@
+services:
+  valkey:
+    image: valkey/valkey:8-alpine
+    container_name: valkey_pr2_202304063
+    ports:
+      - "6379:6379"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:11.5.0
+    container_name: grafana_pr2_202304063
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - valkey
+    restart: always
