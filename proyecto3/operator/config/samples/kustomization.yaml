@@ -1,0 +1,5 @@
+## Append samples of your project ##
+resources:
+- charts_v1alpha1_valkeyinstance.yaml
+- charts_v1alpha1_grafanainstance.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

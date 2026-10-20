@@ -1,0 +1,10 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: charts.so1.ingenieria.usac.edu.gt
+  version: v1alpha1
+  kind: ValkeyInstance
+  chart: helm-charts/valkeyinstance
+- group: charts.so1.ingenieria.usac.edu.gt
+  version: v1alpha1
+  kind: GrafanaInstance
+  chart: helm-charts/grafanainstance
+# +kubebuilder:scaffold:watch

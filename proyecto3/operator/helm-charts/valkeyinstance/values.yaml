@@ -1,0 +1,21 @@
+image:
+  repository: valkey/valkey
+  tag: 8-alpine
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 6379
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: "standard-rwo"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
