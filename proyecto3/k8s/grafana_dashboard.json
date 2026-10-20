@@ -30,7 +30,26 @@
           "type": "command",
           "query": "GET assigned_country"
         }
-      ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/"
+        },
+        "textMode": "value"
+      }
     },
     {
       "id": 2,
@@ -196,7 +215,7 @@
     {
       "id": 9,
       "title": "Frecuencias Aviones en Aire (C\u00e1lculo de Moda)",
-      "type": "bargauge",
+      "type": "table",
       "gridPos": {
         "h": 6,
         "w": 8,
@@ -219,7 +238,7 @@
     {
       "id": 10,
       "title": "Frecuencias Barcos en Mar (C\u00e1lculo de Moda)",
-      "type": "bargauge",
+      "type": "table",
       "gridPos": {
         "h": 6,
         "w": 8,
@@ -242,7 +261,7 @@
     {
       "id": 11,
       "title": "Top Pa\u00edses con M\u00e1s Aviones en Aire",
-      "type": "barchart",
+      "type": "table",
       "gridPos": {
         "h": 7,
         "w": 12,
@@ -262,12 +281,29 @@
           "type": "command",
           "query": "ZREVRANGE top_countries_warplanes 0 4 WITHSCORES"
         }
-      ]
+      ],
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "source": "Value"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "id": 12,
       "title": "Top Pa\u00edses con M\u00e1s Barcos en Mar",
-      "type": "barchart",
+      "type": "table",
       "gridPos": {
         "h": 7,
         "w": 12,
@@ -287,7 +323,24 @@
           "type": "command",
           "query": "ZREVRANGE top_countries_warships 0 4 WITHSCORES"
         }
-      ]
+      ],
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "source": "Value"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "id": 13,
