@@ -14,7 +14,7 @@
       "title": "Pa\u00eds Asignado",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 0,
         "y": 0
@@ -41,14 +41,18 @@
         "overrides": []
       },
       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
         "reduceOptions": {
-          "values": false,
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/.*/"
+          "fields": "",
+          "values": false
         },
-        "textMode": "value"
+        "textMode": "value_and_name"
       }
     },
     {
@@ -56,7 +60,7 @@
       "title": "Carnet Asignado",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 4,
         "y": 0
@@ -72,14 +76,28 @@
           "type": "command",
           "query": "GET assigned_carnet"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 3,
       "title": "Total Reportes Recibidos (RUS)",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 8,
         "y": 0
@@ -95,14 +113,28 @@
           "type": "command",
           "query": "GET assigned_total_reports"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 4,
       "title": "Total Reportes Globales",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 12,
         "y": 0
@@ -118,14 +150,28 @@
           "type": "command",
           "query": "GET total_reports"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 5,
       "title": "M\u00e1ximo General Aviones en Aire",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 16,
         "y": 0
@@ -141,14 +187,28 @@
           "type": "command",
           "query": "GET max_warplanes"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 6,
       "title": "M\u00ednimo General Aviones en Aire",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 20,
         "y": 0
@@ -164,14 +224,28 @@
           "type": "command",
           "query": "GET min_warplanes"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 7,
       "title": "M\u00e1ximo General Barcos en Mar",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 0,
         "y": 4
@@ -187,14 +261,28 @@
           "type": "command",
           "query": "GET max_warships"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 8,
       "title": "M\u00ednimo General Barcos en Mar",
       "type": "stat",
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 4,
         "y": 4
@@ -210,7 +298,21 @@
           "type": "command",
           "query": "GET min_warships"
         }
-      ]
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      }
     },
     {
       "id": 9,
@@ -282,19 +384,16 @@
           "query": "ZREVRANGE top_countries_warplanes 0 4 WITHSCORES"
         }
       ],
-      "transformations": [
-        {
-          "id": "extractFields",
-          "options": {
-            "source": "Value"
-          }
-        }
-      ],
+      "transformations": [],
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": "auto",
-            "displayMode": "auto"
+            "align": "left",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "color": {
+            "mode": "palette-classic"
           }
         },
         "overrides": []
@@ -324,19 +423,16 @@
           "query": "ZREVRANGE top_countries_warships 0 4 WITHSCORES"
         }
       ],
-      "transformations": [
-        {
-          "id": "extractFields",
-          "options": {
-            "source": "Value"
-          }
-        }
-      ],
+      "transformations": [],
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": "auto",
-            "displayMode": "auto"
+            "align": "left",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "color": {
+            "mode": "palette-classic"
           }
         },
         "overrides": []
@@ -347,7 +443,7 @@
       "title": "Historial de Reportes Pa\u00eds Asignado (RUS)",
       "type": "table",
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
         "y": 17
@@ -364,6 +460,14 @@
           "max": "-1",
           "type": "command",
           "query": "LRANGE timeseries_assigned 0 -1"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "source": "Value"
+          }
         }
       ]
     }
