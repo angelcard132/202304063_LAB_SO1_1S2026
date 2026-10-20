@@ -1,0 +1,18 @@
+# Multi-stage Dockerfile for Go Deployment 1 (gRPC Client)
+FROM golang:alpine AS builder
+
+WORKDIR /app
+COPY proto /proto
+COPY go_deployment1 /app
+
+RUN go mod tidy && CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /bin/grpc_client ./grpc_client
+
+FROM alpine:3.21
+RUN apk --no-cache add ca-certificates curl
+WORKDIR /app
+COPY --from=builder /bin/grpc_client /bin/grpc_client
+
+ENV PORT=8082
+EXPOSE 8082
+
+CMD ["/bin/grpc_client"]
