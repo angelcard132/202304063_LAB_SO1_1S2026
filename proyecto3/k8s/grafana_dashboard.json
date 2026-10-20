@@ -34,7 +34,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "green",
+            "mode": "fixed"
           },
           "mappings": []
         },
@@ -43,16 +44,14 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "values": true,
           "fields": "",
-          "values": false
+          "limit": 1
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -80,7 +79,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -89,7 +88,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -117,7 +116,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -126,7 +125,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -154,7 +153,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -163,7 +162,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -191,7 +190,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -200,7 +199,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -228,7 +227,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -237,7 +236,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -265,7 +264,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -274,7 +273,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -302,7 +301,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -311,7 +310,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -335,7 +334,20 @@
           "type": "command",
           "query": "HGETALL freq_warplanes"
         }
-      ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "displayMode": "color-background",
+            "inspect": false
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "id": 10,
@@ -358,7 +370,20 @@
           "type": "command",
           "query": "HGETALL freq_warships"
         }
-      ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "displayMode": "color-background",
+            "inspect": false
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      }
     },
     {
       "id": 11,
@@ -388,8 +413,8 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": "left",
-            "displayMode": "auto",
+            "align": "center",
+            "displayMode": "gradient-gauge",
             "inspect": false
           },
           "color": {
@@ -427,8 +452,8 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": "left",
-            "displayMode": "auto",
+            "align": "center",
+            "displayMode": "gradient-gauge",
             "inspect": false
           },
           "color": {
