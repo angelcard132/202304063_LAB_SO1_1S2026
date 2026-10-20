@@ -47,9 +47,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": true,
-          "fields": "",
-          "limit": 1
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/"
         },
         "textMode": "value"
       }
