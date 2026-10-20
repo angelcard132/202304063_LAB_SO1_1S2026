@@ -1,0 +1,104 @@
+services:
+  # 1. Message Broker (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # Puerto AMQP
+      - "15672:15672" # Panel web de administración (guest:guest)
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_port_connectivity" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Base de Datos / Cache (Valkey)
+  valkey:
+    image: valkey/valkey:8-alpine
+    container_name: valkey
+    ports:
+      - "6380:6379"
+
+  # 3. Go Deployment 2 (Simulando el Pod con Red Compartida)
+  # Contenedor 2: RabbitMQ Writer
+  go-dep2-writer:
+    build:
+      context: .
+      dockerfile: go_deployment2/Dockerfile.rabbitmq_writer
+    container_name: go-dep2-writer
+    environment:
+      - PORT=8083
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - RABBITMQ_QUEUE=war_reports_queue
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  # Contenedor 1: gRPC Server (Comparte red con go-dep2-writer como en un Pod de K8s)
+  go-dep2-grpc:
+    build:
+      context: .
+      dockerfile: go_deployment2/Dockerfile.grpc_server
+    container_name: go-dep2-grpc
+    network_mode: "service:go-dep2-writer" # En K8s los containers del mismo pod comparten localhost
+    environment:
+      - PORT=50051
+      - RABBITMQ_WRITER_URL=http://localhost:8083/publish
+    depends_on:
+      - go-dep2-writer
+
+  # 4. Go Deployment 1 (Simulando el Pod con Red Compartida)
+  # Contenedor 2: gRPC Client
+  go-dep1-client:
+    build:
+      context: .
+      dockerfile: go_deployment1/Dockerfile.grpc_client
+    container_name: go-dep1-client
+    environment:
+      - PORT=8082
+      - GRPC_SERVER_ADDR=go-dep2-writer:50051
+    depends_on:
+      - go-dep2-grpc
+
+  # Contenedor 1: REST Ingest (Comparte red con go-dep1-client como en un Pod de K8s)
+  go-dep1-ingest:
+    build:
+      context: .
+      dockerfile: go_deployment1/Dockerfile.rest_ingest
+    container_name: go-dep1-ingest
+    network_mode: "service:go-dep1-client"
+    environment:
+      - PORT=8081
+      - GRPC_CLIENT_URL=http://localhost:8082/forward
+    depends_on:
+      - go-dep1-client
+
+  # 5. API REST en Rust (Punto de entrada expuesto en el puerto 8080)
+  api-rust:
+    build:
+      context: ./api_rust
+      dockerfile: Dockerfile
+    container_name: api-rust
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - GO_TARGET_URL=http://go-dep1-client:8081/report
+    depends_on:
+      - go-dep1-ingest
+
+  # 6. Go Consumer (Lee RabbitMQ y escribe en Valkey)
+  consumer-go:
+    build:
+      context: .
+      dockerfile: consumer_go/Dockerfile
+    container_name: consumer-go
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+      - RABBITMQ_QUEUE=war_reports_queue
+      - VALKEY_ADDR=valkey:6379
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      valkey:
+        condition: service_started
