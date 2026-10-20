@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-REGISTRY="34.55.154.187:5000"
+REGISTRY="34.59.251.34:5000"
 
 echo "=== 1/5 Subiendo go-dep1-client ==="
 docker buildx build --output type=image,oci-mediatypes=true,push=true \

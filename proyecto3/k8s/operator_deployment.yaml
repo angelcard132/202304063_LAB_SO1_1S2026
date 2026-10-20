@@ -51,7 +51,7 @@ spec:
       serviceAccountName: operator-controller-manager
       containers:
         - name: manager
-          image: 34.55.154.187:5000/valkey-grafana-operator:v1
+          image: 34.59.251.34:5000/valkey-grafana-operator:v1
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE

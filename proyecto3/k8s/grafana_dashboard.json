@@ -1,0 +1,149 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "País Asignado",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "assigned_country", "type": "command" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Carnet Asignado",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "assigned_carnet", "type": "command" }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Total Reportes Recibidos (RUS)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "assigned_total_reports", "type": "command" }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Total Reportes Globales",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "total_reports", "type": "command" }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Máximo General Aviones en Aire",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "max_warplanes", "type": "command" }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Mínimo General Aviones en Aire",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "min_warplanes", "type": "command" }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Máximo General Barcos en Mar",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 4 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "max_warships", "type": "command" }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Mínimo General Barcos en Mar",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 4 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "get", "key": "min_warships", "type": "command" }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Frecuencias Aviones en Aire (Cálculo de Moda)",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 4 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "hgetall", "key": "freq_warplanes", "type": "command" }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Frecuencias Barcos en Mar (Cálculo de Moda)",
+      "type": "bargauge",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 4 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "hgetall", "key": "freq_warships", "type": "command" }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Top Países con Más Aviones en Aire",
+      "type": "barrage",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 10 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "zrevrangeWithScores", "key": "top_countries_warplanes", "min": "0", "max": "4", "type": "command" }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Top Países con Más Barcos en Mar",
+      "type": "barrage",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 10 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "zrevrangeWithScores", "key": "top_countries_warships", "min": "0", "max": "4", "type": "command" }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Historial de Reportes País Asignado (RUS)",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 17 },
+      "datasource": { "type": "redis-datasource", "uid": "ag1u03pqzb37kc" },
+      "targets": [
+        { "command": "lrange", "key": "timeseries_assigned", "min": "0", "max": "-1", "type": "command" }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["sopes1", "kubernetes", "valkey", "202304063"],
+  "time": { "from": "now-15m", "to": "now" },
+  "timezone": "browser",
+  "title": "M.U.M.N.K8s - Monitoreo Militar (RUS - 202304063)",
+  "uid": "mumn-k8s-202304063"
+}
