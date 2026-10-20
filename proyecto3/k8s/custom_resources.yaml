@@ -1,0 +1,17 @@
+apiVersion: charts.so1.ingenieria.usac.edu.gt/v1alpha1
+kind: ValkeyInstance
+metadata:
+  name: valkey-cluster
+  namespace: default
+spec:
+  persistence:
+    enabled: true
+    size: 1Gi
+---
+apiVersion: charts.so1.ingenieria.usac.edu.gt/v1alpha1
+kind: GrafanaInstance
+metadata:
+  name: grafana-cluster
+  namespace: default
+spec:
+  adminPassword: "admin"

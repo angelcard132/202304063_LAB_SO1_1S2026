@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: zot-cert-injector
+  namespace: kube-system
+  labels:
+    app: zot-cert-injector
+spec:
+  selector:
+    matchLabels:
+      app: zot-cert-injector
+  template:
+    metadata:
+      labels:
+        app: zot-cert-injector
+    spec:
+      hostPID: true
+      tolerations:
+        - operator: "Exists"
+      initContainers:
+        - name: install-cert
+          image: busybox:1.37
+          command:
+            - sh
+            - -c
+            - |
+              echo "Instalando certificado de Zot en containerd de los nodos..."
+              mkdir -p /etc/containerd/certs.d/34.55.154.187:5000
+              cp /tmp/certs/ca.crt /etc/containerd/certs.d/34.55.154.187:5000/ca.crt
+              cat <<EOF > /etc/containerd/certs.d/34.55.154.187:5000/hosts.toml
+              server = "https://34.55.154.187:5000"
+
+              [host."https://34.55.154.187:5000"]
+                capabilities = ["pull", "resolve"]
+                ca = ["/etc/containerd/certs.d/34.55.154.187:5000/ca.crt"]
+                skip_verify = true
+              EOF
+              echo "Certificado instalado correctamente en containerd."
+          volumeMounts:
+            - name: containerd-certs
+              mountPath: /etc/containerd/certs.d
+            - name: zot-cert-vol
+              mountPath: /tmp/certs
+      containers:
+        - name: pause
+          image: gcr.io/google-containers/pause:3.2
+      volumes:
+        - name: containerd-certs
+          hostPath:
+            path: /etc/containerd/certs.d
+            type: DirectoryOrCreate
+        - name: zot-cert-vol
+          secret:
+            secretName: zot-ca-cert

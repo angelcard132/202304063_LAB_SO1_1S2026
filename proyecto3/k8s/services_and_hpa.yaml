@@ -1,0 +1,264 @@
+# ---------------------------------------------------------------------
+# Go Deployment 2 (Pod multi-contenedor: gRPC Server + RabbitMQ Writer)
+# ---------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-deployment2
+  namespace: default
+  labels:
+    app: go-deployment2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-deployment2
+  template:
+    metadata:
+      labels:
+        app: go-deployment2
+    spec:
+      containers:
+        - name: grpc-server
+          image: 34.55.154.187:5000/go-dep2-grpc:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50051
+              name: grpc
+          env:
+            - name: PORT
+              value: "50051"
+            - name: RABBITMQ_WRITER_URL
+              value: "http://localhost:8083/publish"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+        - name: rabbitmq-writer
+          image: 34.55.154.187:5000/go-dep2-writer:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+              name: http
+          env:
+            - name: PORT
+              value: "8083"
+            - name: RABBITMQ_URL
+              value: "amqp://guest:guest@rabbitmq-service:5672/"
+            - name: RABBITMQ_QUEUE
+              value: "war_reports_queue"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-deployment2-service
+  namespace: default
+  labels:
+    app: go-deployment2
+spec:
+  ports:
+    - port: 50051
+      targetPort: 50051
+      name: grpc
+  selector:
+    app: go-deployment2
+---
+# ---------------------------------------------------------------------
+# Go Deployment 1 (Pod multi-contenedor: REST Ingestion + gRPC Client)
+# ---------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-deployment1
+  namespace: default
+  labels:
+    app: go-deployment1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-deployment1
+  template:
+    metadata:
+      labels:
+        app: go-deployment1
+    spec:
+      containers:
+        - name: rest-ingest
+          image: 34.55.154.187:5000/go-dep1-ingest:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              name: http
+          env:
+            - name: PORT
+              value: "8081"
+            - name: GRPC_CLIENT_URL
+              value: "http://localhost:8082/forward"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+        - name: grpc-client
+          image: 34.55.154.187:5000/go-dep1-client:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+              name: http
+          env:
+            - name: PORT
+              value: "8082"
+            - name: GRPC_SERVER_ADDR
+              value: "go-deployment2-service:50051"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-deployment1-service
+  namespace: default
+  labels:
+    app: go-deployment1
+spec:
+  ports:
+    - port: 8081
+      targetPort: 8081
+      name: http
+  selector:
+    app: go-deployment1
+---
+# ---------------------------------------------------------------------
+# Go Consumer (RabbitMQ -> Valkey)
+# ---------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-go
+  namespace: default
+  labels:
+    app: consumer-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer-go
+  template:
+    metadata:
+      labels:
+        app: consumer-go
+    spec:
+      containers:
+        - name: consumer
+          image: 34.55.154.187:5000/consumer-go:v1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RABBITMQ_URL
+              value: "amqp://guest:guest@rabbitmq-service:5672/"
+            - name: RABBITMQ_QUEUE
+              value: "war_reports_queue"
+            - name: VALKEY_ADDR
+              value: "valkey-service:6379"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+---
+# ---------------------------------------------------------------------
+# API REST en Rust (Escala con HPA de 1 a 3 réplicas)
+# ---------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-rust
+  namespace: default
+  labels:
+    app: api-rust
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-rust
+  template:
+    metadata:
+      labels:
+        app: api-rust
+    spec:
+      containers:
+        - name: api-rust
+          image: 34.55.154.187:5000/api-rust:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: PORT
+              value: "8080"
+            - name: GO_TARGET_URL
+              value: "http://go-deployment1-service:8081/report"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-rust-service
+  namespace: default
+  labels:
+    app: api-rust
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+  selector:
+    app: api-rust
+---
+# ---------------------------------------------------------------------
+# HPA para API Rust (1 a 3 réplicas con CPU > 30%)
+# ---------------------------------------------------------------------
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-rust-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-rust
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 30
