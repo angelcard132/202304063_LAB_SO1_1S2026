@@ -70,12 +70,8 @@ El sistema implementa una arquitectura distribuida orientada a microservicios al
         └──────────────────────────────────────────────┘
 ```
 
-> **[EVIDENCIA FOTOGRÁFICA 1: INFRAESTRUCTURA GCP Y CLÚSTER GKE]**
-> *Pegar aquí captura de pantalla de la consola de Google Cloud (GKE Clusters / Compute Engine) o de la terminal mostrando el clúster y los nodos activos.*
->
-> *(Ruta sugerida de imagen: `evidencias/01_gke_cluster_nodes.png`)*
->
-> ![Infraestructura GKE y Nodos](evidencias/01_gke_cluster_nodes.png)
+
+![alt text](evidencias/01_gke_cluster_nodes.png)
 
 ---
 
@@ -87,13 +83,7 @@ En sustitución del tradicional Ingress Controller, se implementó el estándar 
 * **HTTPRoute:** `war-http-route` que mapea el prefijo de ruta `/grpc-202304063` hacia el Service interno `api-rust-service:8080`.
 * **Health Check:** Conexión hacia el endpoint de salud `/healthz` de la API de Rust en el puerto 8080, permitiendo que el balanceador marque en verde los endpoints NEG (Network Endpoint Groups).
 
-> **[EVIDENCIA FOTOGRÁFICA 2: GATEWAY API Y HTTPROUTE]**
-> *Pegar aquí captura de la terminal mostrando la configuración del Gateway y el HTTPRoute funcionando.*
->
-> *(Ruta sugerida de imagen: `evidencias/02_gateway_api.png`)*
->
-> ![Configuración de Gateway API](evidencias/02_gateway_api.png)
-
+![alt text](evidencias/02_gateway_api.png)
 ---
 
 ### 2.2 API REST en Rust (Axum Tokio)
@@ -105,12 +95,7 @@ Desarrollada en Rust con el framework web asíncrono **Axum** y runtime multitar
   * Rango de réplicas: Mínimo 1 Pod, Máximo 3 Pods.
   * Monitoreo por `metrics-server` en GKE.
 
-> **[EVIDENCIA FOTOGRÁFICA 3: PODS Y AUTOESCALADO HPA]**
-> *Pegar aquí captura de la terminal mostrando los Pods de `api-rust` y la salida de `kubectl get hpa api-rust-hpa`.*
->
-> *(Ruta sugerida de imagen: `evidencias/03_hpa_scaling.png`)*
->
-> ![Horizontal Pod Autoscaler](evidencias/03_hpa_scaling.png)
+![alt text](evidencias/03_hpa_scaling.png)
 
 ---
 
@@ -125,12 +110,7 @@ Implementado como un Pod multi-contenedor con dos procesos compartiendo el mismo
 1. **Contenedor 1 (`grpc_server`):** Servidor gRPC en Go expuesto en el puerto 50051 mediante `go-deployment2-service`. Implementa el método RPC `SendReport` definido en el protobuf. Al recibir el mensaje binario, lo remite internamente vía HTTP a `localhost:8083`.
 2. **Contenedor 2 (`rabbitmq_writer`):** Publicador que se conecta a RabbitMQ con reintentos automáticos y publica el reporte militar con entrega persistente (`amqp.Persistent`) en la cola `war_reports_queue`.
 
-> **[EVIDENCIA FOTOGRÁFICA 4: DEPLOYMENTS MULTI-CONTENEDOR DE GO]**
-> *Pegar aquí captura de pantalla donde se observe que los Pods de Go cuentan con estado `2/2` contenedores listos.*
->
-> *(Ruta sugerida de imagen: `evidencias/04_go_multicontainer_pods.png`)*
->
-> ![Pods Multi-Contenedor en Ejecución](evidencias/04_go_multicontainer_pods.png)
+![alt text](evidencias/04_go_multicontainer_pods.png)
 
 ---
 
@@ -163,12 +143,7 @@ El clúster cuenta con un operador desarrollado con **Operator SDK v1.39.1** uti
   * Reconcilia un servicio `LoadBalancer` en la IP pública `34.132.42.217:3000`.
   * Lógica de reconciliación declarativa: el operador observa continuamente el estado deseado en los Custom Resources (`k8s/custom_resources.yaml`) y mantiene las instancias sincronizadas.
 
-> **[EVIDENCIA FOTOGRÁFICA 5: OPERATOR SDK, CRDs Y CUSTOM RESOURCES]**
-> *Pegar aquí captura de la terminal mostrando el Operator corriendo en `operator-system`, las CRDs y los recursos `ValkeyInstance` y `GrafanaInstance`.*
->
-> *(Ruta sugerida de imagen: `evidencias/05_operator_crds.png`)*
->
-> ![Operator SDK y Custom Resources](evidencias/05_operator_crds.png)
+![alt text](evidencias/05_operator_crds.png)
 
 ---
 
@@ -187,13 +162,7 @@ Para cumplir con el requerimiento de seguridad e infraestructura:
   * `34.59.251.34:5000/consumer-go:v1`
   * `34.59.251.34:5000/valkey-grafana-operator:v1`
 
-> **[EVIDENCIA FOTOGRÁFICA 6: ZOT REGISTRY E IMÁGENES OCI]**
-> *Pegar aquí captura de la máquina virtual de Zot o del catálogo OCI de imágenes.*
->
-> *(Ruta sugerida de imagen: `evidencias/06_zot_registry_catalog.png`)*
->
-> ![Catálogo de Zot Registry](evidencias/06_zot_registry_catalog.png)
-
+![alt text](evidencias/06_zot_registry_catalog.png)
 ---
 
 ## 4. Pruebas de Carga con Locust y Dashboard de Grafana
@@ -207,13 +176,6 @@ Se ejecutó Locust simulando múltiples usuarios concurrentes generando tráfico
 * **Tasa de Fallos:** **0.00% (4,465 éxitos / 0 errores)**
 * **Throughput Promedio:** 112.58 req/s
 * **Latencia Promedio:** 121 ms (Mediana: 110 ms)
-
-> **[EVIDENCIA FOTOGRÁFICA 7: RESULTADOS DE LOCUST]**
-> *Pegar aquí captura de la terminal o reporte con la tabla final de Locust mostrando 0% de fallos.*
->
-> *(Ruta sugerida de imagen: `evidencias/07_locust_load_test.png`)*
->
-> ![Pruebas de Carga con Locust](evidencias/07_locust_load_test.png)
 
 ---
 
@@ -230,12 +192,8 @@ El dashboard se encuentra alojado en `http://34.132.42.217:3000` con visualizaci
 7. **Top Países con Más Aviones y Barcos en el Aire:** Tablas analíticas con indicadores visuales de barra en degradado (`gradient-gauge`).
 8. **Historial de Reportes Asignados (RUS):** Tabla en tiempo real desglosando los registros JSON con `timestamp`, `warplanes_in_air` y `warships_in_water`.
 
-> **[EVIDENCIA FOTOGRÁFICA 8: DASHBOARD EN GRAFANA]**
-> *Pegar aquí la captura completa del navegador mostrando el Dashboard de Grafana con todos los paneles llenos.*
->
-> *(Ruta sugerida de imagen: `evidencias/08_grafana_dashboard.png`)*
->
-> ![Dashboard de Monitoreo Militar en Grafana](evidencias/08_grafana_dashboard.png)
+![alt text](evidencias/07_grafana_dashboard.png)
+
 
 ---
 
